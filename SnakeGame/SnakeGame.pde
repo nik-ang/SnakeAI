@@ -1,6 +1,5 @@
 
 
-
 void setup() {
   size(1000, 600);
   println("Initiate");
@@ -9,7 +8,7 @@ void setup() {
   aPlace.update();
 }
 
-Environment aPlace = new Environment(900, 500, 20, 20, 20, 3, 10);
+Environment aPlace = new Environment(900, 500, 20, 20, 2000, 3, 10);
 
 void draw() {
   background(0);

@@ -26,6 +26,9 @@ class Eyes {
   // [Food, Wall, Tail]
   int[][] distances = new int[8][3];
 
+//------------------------------------------------------------------------------
+// CONSTRUCTOR
+//------------------------------------------------------------------------------
 
   Eyes(Snake snake) {
     this.snake = snake;
@@ -36,6 +39,8 @@ class Eyes {
       }
     }
   }
+
+//-------------------------------------------------------------------------------
 
   void lookAtDirections() {
 
@@ -93,6 +98,8 @@ class Eyes {
       }
     }
   }
+  
+//--------------------------------------------------------------------------------
 
   boolean findFood(PVector location) {
     if (this.snake.food.position.equals(location)) {
@@ -100,6 +107,8 @@ class Eyes {
     }
     return false;
   }
+  
+//--------------------------------------------------------------------------------
 
   boolean findWall(PVector location) {  
     if (this.outOfBounds(location)) {
@@ -107,6 +116,8 @@ class Eyes {
     }
     return false;
   }
+
+//------------------------------------------------------------------------------
 
   boolean findTail(PVector location) {
     for (int i = 0; i < this.snake.snakeParts.size(); i++) {
@@ -116,6 +127,8 @@ class Eyes {
     }
     return false;
   }
+
+//------------------------------------------------------------------------------
 
   boolean outOfBounds(PVector position) {
     if (position.x < this.snake.environment.origin.x + this.snake.squareSize || position.x + this.snake.squareSize >= this.snake.environment.w + this.snake.environment.origin.x || position.y < this.snake.environment.origin.y + this.snake.squareSize || this.snake.squareSize + position.y >= this.snake.environment.h + this.snake.environment.origin.y) {

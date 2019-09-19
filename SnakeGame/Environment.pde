@@ -23,10 +23,12 @@ class Environment {
     this.initLength = initLength;
     this.squareSize = squareSize;
     for (int i = 0; i < snakesCount; i++) {
-      this.snakes.add(new Snake(initLength, squareSize, this));
+      this.snakes.add(new Snake(initLength, squareSize, this, true));
     }
     
   }
+  
+  //---------------------------------------------------------------------------------
   
   void display() {
     
@@ -40,6 +42,8 @@ class Environment {
     }     
   }
   
+  //---------------------------------------------------------------------------------
+  
   boolean allSnakesDead() {
     for (int i = 0; i < this.snakes.size(); i++) {
       if (!this.snakes.get(i).dead) {
@@ -49,21 +53,75 @@ class Environment {
     return true;
   }
   
+  //--------------------------------------------------------------------------------
   
-  //Clone
-  void getNewGeneration() {
-    ArrayList<Snake> newSnakes = new ArrayList<Snake>();
+  Snake selectParent() {
     float runningSum = 0;
     
-    float rand = random(runningSum);
+    float rand = random(this.fitnessSum);
     for (int i = 0; i < this.snakes.size(); i++) {
       runningSum += this.snakes.get(i).fitness;
       if (runningSum > rand) {
-        newSnakes.add(this.snakes.get(i));
+        return this.snakes.get(i);
       }
     }
     
+    return null;
   }
+  
+  Snake[] selectParents() {
+    Snake parents[] = new Snake[2];
+    ArrayList<Snake> potentialParents = new ArrayList<Snake>(this.snakes);
+    float randFather = random(this.fitnessSum);
+    float randMother = 0;
+    float runningSum = 0;
+    
+    for (int i = 0; i < this.snakes.size(); i++) {
+      runningSum += this.snakes.get(i).fitness;
+      if (runningSum > randFather) {
+        parents[0] = this.snakes.get(i);
+        potentialParents.remove(i);
+        randMother = random(this.fitnessSum - this.snakes.get(i).fitness);
+        break;
+      }
+    }
+    
+    runningSum = 0;
+    for (int i = 0; i < potentialParents.size(); i++) {
+      runningSum += potentialParents.get(i).fitness;
+      if (runningSum > randMother) {
+        parents[1] = potentialParents.get(i);
+        break;
+      }
+    }
+    
+    return parents;
+    
+  }
+  
+  //---------------------------------------------------------------------------------
+  
+  ArrayList<Snake> createNewGeneration(float mutationRate) {
+
+    ArrayList<Snake> newGen = new ArrayList<Snake>();
+    
+    
+    for (int i = 0; i < this.snakes.size(); i++) {
+      newGen.add(new Snake(this.initLength, this.squareSize, this, false));
+      Snake[] parents = this.selectParents();
+      
+      newGen.get(i).brain.inheritBrainFromSnake(parents[0]);
+      newGen.get(i).brain.crossOverFromSnake(parents[1]);
+      newGen.get(i).brain.mutateBrain(mutationRate);
+      
+    }
+    
+    return newGen;
+    
+  }
+  
+  
+  //---------------------------------------------------------------------------------
   
   void update() {
     
@@ -77,9 +135,15 @@ class Environment {
       }
     }
     
-    
-    
+    if (this.allSnakesDead()) {
+      this.calculateFitness();
+      this.calculateFitnessSum();
+      this.snakes = this.createNewGeneration(0.05);
+    }
+       
   }
+  
+  //---------------------------------------------------------------------------------
   
   void calculateFitness() {
     for (int i = 0; i < this.snakes.size(); i++) {

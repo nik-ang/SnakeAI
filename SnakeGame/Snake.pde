@@ -19,16 +19,17 @@ class Snake {
   Environment environment;
   Food food;
   
-  
-// CONSTRUCTOR --------------------------------------------------------------------------------------  
-  
-  Snake(int initialLength, float squareSize, Environment environment) {
-    println("I am a snake");
+//--------------------------------------------------------------------------------------------  
+// CONSTRUCTOR  
+// -------------------------------------------------------------------------------------------
+
+  Snake(int initialLength, float squareSize, Environment environment, boolean randStart) {
+    //println("I am a snake");
     this.snakeLength = initialLength;
     this.squareSize = squareSize;
     
     this.eyes = new Eyes(this);
-    this.brain = new Brain(this);
+    this.brain = new Brain(this, randStart);
     
     
     
@@ -36,8 +37,14 @@ class Snake {
     this.movementDirection.x = 1;
     this.movementDirection.y = 0;
     
+    //float originX = environment.origin.x + random(100, environment.w - 100);
+    //float originY = environment.origin.y + random(100, environment.h - 100);
+    
+    float originX = environment.origin.x + 400;
+    float originY = environment.origin.y + 300;
+    
     for (int i = 0; i < initialLength; i++) {
-      this.snakeParts.add(new SnakeSquare(this.environment.origin.x + 100, this.environment.origin.y + 300 + i*this.squareSize, this.squareSize, this)); 
+      this.snakeParts.add(new SnakeSquare(originX , originY + i*squareSize, squareSize, this)); 
     }
     this.head = this.snakeParts.get(0);
     
@@ -48,12 +55,15 @@ class Snake {
 //----------------------------------- 
   
   void update() {
+    
     if (this.outOfBounds(this.head.position) || this.movesLeft == 0) {
       this.dead = true;
     }
+    
     if (this.canFeed()) {
       this.eat(); 
     }
+    
     if (this.crashedTail()) {
       this.dead = true; 
     }
@@ -141,25 +151,18 @@ class Snake {
 //-------------------------------------------------- ARBITRARY
 
   void resetMoves(int moves) {
-     this.movesLeft = moves; 
+     this.movesLeft += moves*this.timesFed; 
   }
   
   
 //------------------------------------------------
 
   float calculateFitness() {
-    float fit = this.timesFed * this.survivalTime;
+    float fit = this.timesFed * this.timesFed * this.survivalTime * this.survivalTime;
     this.fitness = fit;
     return fit;
   }
   
-//----------------------------------------------
-
-  /*Snake clone() {
-    Snake newSnake = new Snake();
-    
-  }*/
-
   
 //-------------------------------------------  
   void display() {

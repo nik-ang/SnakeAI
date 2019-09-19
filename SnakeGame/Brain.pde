@@ -5,15 +5,15 @@ class Brain {
   Eyes eyes;
   String currentDirection;
   
-  int[] neurons = {24, 12, 4};
+  int[] neurons = {24, 16, 16, 4};
   NeuralNetwork net;
   
-  Brain(Snake snake) {
+  Brain(Snake snake, boolean randStart) {
     this.snake = snake;
-    println("Braiiiinns");
+    //println("Braiiiinns");
     this.currentDirection = "right"; 
     this.eyes = snake.eyes;
-    net = new NeuralNetwork(this.neurons, this);
+    net = new NeuralNetwork(this.neurons, this, randStart);
   }
   
   void decideDirection() {
@@ -21,9 +21,20 @@ class Brain {
     //println("decide");
     //println(this.eyes);
     this.move(this.net.think(this.eyes.distances));
-    
   }
   
+  
+  void inheritBrainFromSnake(Snake snake) {
+    this.net.copyFromNetConfig(snake.brain.net);
+  }
+  
+  void crossOverFromSnake(Snake snake){
+    this.net.crossOverFromNet(snake.brain.net); 
+  }
+  
+  void mutateBrain(float mutationRate) {
+    this.net.mutateNet(mutationRate);
+  }
   
   void move(int dir) {
     

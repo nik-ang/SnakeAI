@@ -15,7 +15,7 @@ class NeuralNetwork {
 
 
   //Construct the Network with an array of integers which represent the amount of neurons in every layer.  
-  NeuralNetwork(int[] lays, Brain brain) {
+  NeuralNetwork(int[] lays, Brain brain, boolean randStart) {
     //NeuralNetwork ({3, 2, 1})
 
     this.brain = brain;
@@ -42,15 +42,15 @@ class NeuralNetwork {
     //Weights are stored in N x K matrices, where N is the amount of neurons in its corresponding layer, and K is the amount of neurons in the previous layer
     //Any layer of neurons L contains its weights and biases in the layer L - 1 of both layerWeights and layerBiases
     for (int i = 0; i < layersWeights.length; i++) {
-      println("WEIGHTS");
-      layersWeights[i] = new Matrix(lays[i + 1], lays[i], true);
+      //println("WEIGHTS");
+      layersWeights[i] = new Matrix(lays[i + 1], lays[i], randStart);
     }
 
     //Biases are stored in column vectors
     //Any layer of neurons L contains its weights and biases in the layer L - 1 of both layerWeights and layerBiases
     for (int i = 0; i < layersBiases.length; i++) {
-      println("BIASES");
-      layersBiases[i] = new Matrix(lays[i + 1], 1, true);
+      //println("BIASES");
+      layersBiases[i] = new Matrix(lays[i + 1], 1, randStart);
     }
   }
   
@@ -64,7 +64,7 @@ class NeuralNetwork {
   void feedInfo(float[][] infoMatrix) {
 
     if (infoMatrix.length * infoMatrix[0].length == this.neuronsQty[0]) {
-      print("feed info");
+      //print("feed info");
       int k = 0;
       for (int i = 0; i < infoMatrix.length; i++) {
         for (int j = 0; j < infoMatrix[0].length; j++) {
@@ -99,7 +99,7 @@ class NeuralNetwork {
   //Biases are then added, then values are squishified
   void feedForward() {
     for (int i = 1; i < this.layersAct.length; i++) {
-      this.layersAct[i] = this.layersWeights[i - 1].dot(this.layersAct[i - 1]).add(this.layersBiases[i - 1]).sigmoid();
+      this.layersAct[i] = this.layersWeights[i - 1].dot(this.layersAct[i - 1]).add(this.layersBiases[i - 1]).relu();
       //this.layersAct[i].printMatrix(this.layersAct[i].matrix);
     }
   }
@@ -126,11 +126,24 @@ class NeuralNetwork {
     for (int i = 0; i < this.layersAct.length; i++) {
       this.layersAct[i] = net.layersAct[i].cloneMatrix();  
     }
-    for (int i = 0; i < this.layersAct.length; i++) {
+    for (int i = 0; i < this.layersWeights.length; i++) {
       this.layersWeights[i] = net.layersWeights[i].cloneMatrix();  
     }
-    for (int i = 0; i < this.layersAct.length; i++) {
+    for (int i = 0; i < this.layersBiases.length; i++) {
       this.layersBiases[i] = net.layersBiases[i].cloneMatrix();  
+    }
+    
+  }
+  
+  void crossOverFromNet(NeuralNetwork net) {
+    for (int i = 0; i < this.layersAct.length; i++) {
+      this.layersAct[i].crossOver(net.layersAct[i]);  
+    }
+    for (int i = 0; i < this.layersWeights.length; i++) {
+      this.layersWeights[i].crossOver(net.layersWeights[i]);
+    }
+    for (int i = 0; i < this.layersBiases.length; i++) {
+      this.layersBiases[i].crossOver(net.layersBiases[i]);
     }
     
   }
