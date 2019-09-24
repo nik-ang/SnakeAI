@@ -5,10 +5,11 @@ class Snake {
   
   int snakeLength;
   int timesFed = 0;
+  float score = 0;
   float squareSize;
   PVector movementDirection = new PVector();
   boolean dead = false;
-  int movesLeft = 200; //ARBITRARY
+  int movesLeft = 400; //ARBITRARY
   int survivalTime = 0;
   float fitness = 0;
   
@@ -28,20 +29,19 @@ class Snake {
     this.snakeLength = initialLength;
     this.squareSize = squareSize;
     
+    
+    this.environment = environment;
+    this.movementDirection.x = 0;
+    this.movementDirection.y = -1;
+    
     this.eyes = new Eyes(this);
     this.brain = new Brain(this, randStart);
     
-    
-    
-    this.environment = environment;
-    this.movementDirection.x = 1;
-    this.movementDirection.y = 0;
-    
-    //float originX = environment.origin.x + random(100, environment.w - 100);
-    //float originY = environment.origin.y + random(100, environment.h - 100);
-    
-    float originX = environment.origin.x + 400;
-    float originY = environment.origin.y + 300;
+    //float originX = environment.origin.x + floor(random(100, environment.w - 100) / squareSize) * squareSize;
+    //float originY = environment.origin.y + floor(random(100, environment.h - 100) / squareSize) * squareSize;
+   
+    float originX = (environment.origin.x + environment.w)/2;
+    float originY = (environment.origin.y + environment.h)/2;
     
     for (int i = 0; i < initialLength; i++) {
       this.snakeParts.add(new SnakeSquare(originX , originY + i*squareSize, squareSize, this)); 
@@ -73,7 +73,7 @@ class Snake {
       this.brain.decideDirection();
       this.move();
     }
-    this.display();
+    //this.display();
          
   }
   
@@ -142,7 +142,8 @@ class Snake {
   void eat() {
     this.snakeLength++;
     this.timesFed++;
-    this.resetMoves(100);
+    this.score = this.timesFed * this.movesLeft;
+    this.resetMoves(200);
     PVector newSquarePos = this.snakeParts.get(this.snakeParts.size() - 1).position;
     this.snakeParts.add(new SnakeSquare(newSquarePos.x, newSquarePos.y, this.squareSize, this));
     this.food.placeRandom();
@@ -151,14 +152,14 @@ class Snake {
 //-------------------------------------------------- ARBITRARY
 
   void resetMoves(int moves) {
-     this.movesLeft += moves*this.timesFed; 
+     this.movesLeft = min(moves*this.timesFed, 2000); 
   }
   
   
 //------------------------------------------------
 
   float calculateFitness() {
-    float fit = this.timesFed * this.timesFed * this.survivalTime * this.survivalTime;
+    float fit = 1 +  (this.score * this.score) * (this.survivalTime * this.survivalTime);
     this.fitness = fit;
     return fit;
   }

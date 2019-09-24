@@ -5,7 +5,7 @@ class Brain {
   Eyes eyes;
   String currentDirection;
   
-  int[] neurons = {24, 16, 16, 4};
+  int[] neurons = {24, 16, 6, 4}; //24, 16, 6, 4
   NeuralNetwork net;
   
   Brain(Snake snake, boolean randStart) {
@@ -29,12 +29,13 @@ class Brain {
   }
   
   void crossOverFromSnake(Snake snake){
-    this.net.crossOverFromNet(snake.brain.net); 
+    this.net.crossOverFromNet(snake.brain.net); //error
   }
   
   void mutateBrain(float mutationRate) {
     this.net.mutateNet(mutationRate);
   }
+  
   
   void move(int dir) {
     

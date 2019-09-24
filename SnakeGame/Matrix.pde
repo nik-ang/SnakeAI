@@ -28,7 +28,7 @@ class Matrix {
     this.matrix = new float[i][j];
 
     if (random) {
-      this.randomInit(-20, 20);
+      this.randomInit(-1, 1);
     }
 
     //this.printMatrix(this.matrix);
@@ -88,6 +88,23 @@ class Matrix {
       throw new NullPointerException("Can't add matrices");
     }
   }
+  
+  //-----------------------------------------------------------------------------------------------
+  
+  Matrix squareComponents() {
+    Matrix result = new Matrix(this.rows, this.cols);
+
+    for (int i = 0; i < this.rows; i++) {
+      for (int j = 0; j < this.cols; j++) {
+        result.matrix[i][j] *= result.matrix[i][j];
+      }
+    }
+    return result;
+    
+  }
+  
+  
+  //-----------------------------------------------------------------------------------------------
 
   Matrix sigmoid() {
     Matrix result = new Matrix(this.rows, this.cols);
@@ -99,6 +116,8 @@ class Matrix {
     }
     return result;
   }
+  
+  //-----------------------------------------------------------------------------------------------
   
   Matrix relu() {
     Matrix result = new Matrix(this.rows, this.cols);
@@ -115,14 +134,28 @@ class Matrix {
   //------------------------------------------------------------------------------
   // GENETIC ALGORITHM METHODS
   //------------------------------------------------------------------------------
-
-
+  
+  
   void mutateMatrix(float mutationRate) {
+    
     for (int i = 0; i < this.rows; i++) {
       for (int j = 0; j < this.cols; j++) {
-        this.matrix[i][j] *= (1 + random(-mutationRate, mutationRate));
+        float random = random(1);
+        if (random < mutationRate) {
+          this.matrix[i][j] += randomGaussian()/5;
+          
+          /*if (this.matrix[i][j] > 1) {
+             this.matrix[i][j] = 1;
+          }
+          
+          if (this.matrix[i][j] < -1) {
+            this.matrix[i][j] = -1;  
+          }*/
+          
+        }
       }
     }
+    
   }
   
 

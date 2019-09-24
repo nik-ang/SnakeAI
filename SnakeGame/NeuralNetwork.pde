@@ -99,7 +99,7 @@ class NeuralNetwork {
   //Biases are then added, then values are squishified
   void feedForward() {
     for (int i = 1; i < this.layersAct.length; i++) {
-      this.layersAct[i] = this.layersWeights[i - 1].dot(this.layersAct[i - 1]).add(this.layersBiases[i - 1]).relu();
+      this.layersAct[i] = this.layersWeights[i - 1].dot(this.layersAct[i - 1]).add(this.layersBiases[i - 1]).sigmoid();
       //this.layersAct[i].printMatrix(this.layersAct[i].matrix);
     }
   }
@@ -135,6 +135,8 @@ class NeuralNetwork {
     
   }
   
+  //-----------------------------------------------------------------
+  
   void crossOverFromNet(NeuralNetwork net) {
     for (int i = 0; i < this.layersAct.length; i++) {
       this.layersAct[i].crossOver(net.layersAct[i]);  
@@ -147,12 +149,24 @@ class NeuralNetwork {
     }
     
   }
+  
+  //-----------------------------------------------------------------
 
   void mutateNet(float mutationRate) {
     for (int i = 0; i < this.layersWeights.length; i++) {
       this.layersWeights[i].mutateMatrix(mutationRate);
     }
+    for (int i = 0; i < this.layersBiases.length; i++) {
+      this.layersBiases[i].mutateMatrix(mutationRate);
+    }
+    
   }
+  
+  //-----------------------------------------------------------------
+  
+
+  
+  
 
   //---------------------------------------------------------------------------------------------------------------------
   // SNAKE-SPECIFIC METHODS

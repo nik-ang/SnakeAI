@@ -98,6 +98,38 @@ class Eyes {
       }
     }
   }
+
+//--------------------------------------------------------------------------------  
+  
+  float[][] squaredDistances() {
+    
+    float[][] squaredDistances = new float[this.distances.length][this.distances[0].length];
+    
+    for (int i = 0; i < this.distances.length; i++) {
+      for (int j = 0; j < this.distances[0].length; j++) {
+        squaredDistances[i][j] = pow(this.distances[i][j], 2);  
+      }
+    }
+    
+    return squaredDistances;
+  }
+  
+ //-------------------------------------------------------------------------------
+ 
+ float[][] inverseSquaredDistances() {
+    
+    float[][] inverseSqr = new float[this.distances.length][this.distances[0].length];
+    
+    for (int i = 0; i < this.distances.length; i++) {
+      for (int j = 0; j < this.distances[0].length; j++) {
+        inverseSqr[i][j] = 1 / pow(this.distances[i][j], 1);
+      }
+    }
+    
+    return inverseSqr;
+  }
+  
+  
   
 //--------------------------------------------------------------------------------
 

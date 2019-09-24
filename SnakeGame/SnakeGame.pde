@@ -3,12 +3,12 @@
 void setup() {
   size(1000, 600);
   println("Initiate");
-  frameRate(15);
+  frameRate(2000);
   background(0);
   aPlace.update();
 }
 
-Environment aPlace = new Environment(900, 500, 20, 20, 2000, 3, 10);
+Environment aPlace = new Environment(960, 560, 20, 20, 2000, 3, 10);
 
 void draw() {
   background(0);
