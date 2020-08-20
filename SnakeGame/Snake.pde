@@ -152,7 +152,7 @@ class Snake {
 //-------------------------------------------------- ARBITRARY
 
   void resetMoves(int moves) {
-     this.movesLeft = min(moves*this.timesFed, 2000); 
+     this.movesLeft = min(max(moves*this.timesFed, 400), 2000); 
   }
   
   

@@ -8,7 +8,7 @@ void setup() {
   aPlace.update();
 }
 
-Environment aPlace = new Environment(960, 560, 20, 20, 2000, 3, 10);
+Environment aPlace = new Environment(960, 560, 20, 20, 2000, 3, 10, 20);
 
 void draw() {
   background(0);

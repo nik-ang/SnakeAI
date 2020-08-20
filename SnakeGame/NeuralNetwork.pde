@@ -99,7 +99,7 @@ class NeuralNetwork {
   //Biases are then added, then values are squishified
   void feedForward() {
     for (int i = 1; i < this.layersAct.length; i++) {
-      this.layersAct[i] = this.layersWeights[i - 1].dot(this.layersAct[i - 1]).add(this.layersBiases[i - 1]).sigmoid();
+      this.layersAct[i] = this.layersWeights[i - 1].dot(this.layersAct[i - 1]).add(this.layersBiases[i - 1]).relu();
       //this.layersAct[i].printMatrix(this.layersAct[i].matrix);
     }
   }

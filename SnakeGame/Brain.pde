@@ -20,7 +20,7 @@ class Brain {
     
     //println("decide");
     //println(this.eyes);
-    this.move(this.net.think(this.eyes.distances));
+    this.move(this.net.think(this.eyes.inverseDistances()));
   }
   
   
